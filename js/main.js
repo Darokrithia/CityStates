@@ -31,7 +31,7 @@ function checkKeys(){	//finds keys.  Will be implemented
 function Tile(x, y,color){		//a tile.  pretty self explanitory.  X and Y are the positions
 	this.x = x;
 	this.y = y;
-	this.color = color;
+	this.color = color; //test
 };
 
 function WildernessTile(x,y){
