@@ -56,10 +56,9 @@ function WallTile(x,y){
 	Tile.call(this,x,y,"#999999");
 };
 
-function onCanvasClicked(event){
-	var mouseX = event.pageX - elamLeft;
-	var mouseY = event.pageY - elamTop;
-}
+//function onCanvasClicked(event){
+	
+//}
 
 var c=document.getElementById("canvas");		//gets the canvas
 var cLeft = c.offsetLeft;
@@ -68,7 +67,12 @@ var cTop = c.offsetTop;
 var ctx=c.getContext("2d");						//gets context?
 var delta = (c.width/x);						//how big a tile is
 
-c.addEventListener('click', onCanvasClicked(event),false);
+c.addEventListener('click', function(event){
+	if(event.pageX || event.pageY){
+		var mouseX = event.pageX - cLeft;
+		var mouseY = event.pageY - cTop;
+	}
+},false);
 
 var tileArray = [];								//all the tiles
 
