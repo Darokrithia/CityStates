@@ -56,9 +56,17 @@ function WallTile(x,y){
 	Tile.call(this,x,y,"#999999");
 };
 
-//function onCanvasClicked(event){
-	
-//}
+function onCanvasClicked(xPos,yPos){
+	xPos /= delta;
+	yPos /= delta;
+	xPos =  Math.floor(xPos);
+	yPos =  Math.floor(yPos);
+	tileArray[xPos][yPos].color = "#FF0000";
+
+	//ctx.fillStyle="#FF0000"
+	//ctx.fillRect((xPos*delta),(yPos*delta),delta,delta);
+
+}
 
 var c=document.getElementById("canvas");		//gets the canvas
 var cLeft = c.offsetLeft;
@@ -72,6 +80,7 @@ c.addEventListener('click', function(event){
 		var mouseX = event.pageX - cLeft;
 		var mouseY = event.pageY - cTop;
 	}
+	onCanvasClicked(mouseX,mouseY);
 },false);
 
 var tileArray = [];								//all the tiles
