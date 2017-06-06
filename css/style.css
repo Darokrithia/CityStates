@@ -1,3 +1,16 @@
 body{
   background-color: #FFEEDD;
+  text-align:center;
+  align-items:center;
+}
+.dropContent{
+	display: none;
+}
+.dropButton{
+	background-color: #884400;
+	color: #FFFFFF;
+	padding: 16px;
+	font-size: 16px;
+	border: none;
+	cursor: pointer;
 }
