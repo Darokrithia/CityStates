@@ -98,23 +98,53 @@ function onCanvasClicked(xPos,yPos){
 		selectedTile = clickedTile;
 		clickedTile.selected = true;
 		document.getElementById("dropDownMenu").style.display = "inline";
-		document.getElementById("dropDownMenu1").style.display = "inline";
-		document.getElementById("dropDownMenu2").style.display = "inline";
-		document.getElementById("dropDownMenu3").style.display = "inline";
 	}
 	else if (selectedTile == clickedTile){
 		clickedTile.selected = false;
 		selectedTile = null;
 		document.getElementById("dropDownMenu").style.display = "none";
-		document.getElementById("dropDownMenu1").style.display = "none";
-		document.getElementById("dropDownMenu2").style.display = "none";
-		document.getElementById("dropDownMenu3").style.display = "none";
+		document.getElementById("dropDownMenuBuild").style.display = "none";
+		document.getElementById("dropDownMenuBuy").style.display = "none";
+		document.getElementById("dropDownMenuBoink").style.display = "none";
 	}
 	else{
 		selectedTile.selected = false;
 		selectedTile = clickedTile;
 		clickedTile.selected = true;
+		document.getElementById("dropDownMenuBuild").style.display = "none";
+		document.getElementById("dropDownMenuBuy").style.display = "none";
+		document.getElementById("dropDownMenuBoink").style.display = "none";
 	}
+}
+
+function toggelBuild(){
+	if(document.getElementById("dropDownMenuBuild").style.display == "inline"){
+		document.getElementById("dropDownMenuBuild").style.display = "none"
+		return;
+	}
+	document.getElementById("dropDownMenuBuild").style.display = "inline";
+	document.getElementById("dropDownMenuBuy").style.display = "none";
+	document.getElementById("dropDownMenuBoink").style.display = "none";
+}
+
+function toggelBuy(){
+	if(document.getElementById("dropDownMenuBuy").style.display == "inline"){
+		document.getElementById("dropDownMenuBuy").style.display = "none"
+		return;
+	}
+	document.getElementById("dropDownMenuBuild").style.display = "none";
+	document.getElementById("dropDownMenuBuy").style.display = "inline";
+	document.getElementById("dropDownMenuBoink").style.display = "none";
+}
+
+function toggelBoink(){	
+	if(document.getElementById("dropDownMenuBoink").style.display == "inline"){
+		document.getElementById("dropDownMenuBoink").style.display = "none"
+		return;
+	}
+	document.getElementById("dropDownMenuBuild").style.display = "none";
+	document.getElementById("dropDownMenuBuy").style.display = "none";
+	document.getElementById("dropDownMenuBoink").style.display = "inline";
 }
 
 var c=document.getElementById("canvas");		//gets the canvas
