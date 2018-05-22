@@ -4,6 +4,8 @@ var y = 10;
 var i;		//index variables
 var j;
 
+var selectedTile;
+
 function run(){		//called over and over to make the program run
 	tick();
 	render();
@@ -11,15 +13,31 @@ function run(){		//called over and over to make the program run
 
 function tick(){	//the thinking part of the program
 	checkKeys();
+	for (i = 0; i<x; i++){		//goes through all tiles
+		for (j = y-1; j>=0; j--){
+			tileArray[i][j].pop.size *= 1.005;
+			var tl = (tileArray[i][j]);		//grabes a tile
+			var popSize = tl.pop.size;
+			// if(popSize >= 1000){
+			// 	tileArray[i][j] = new RoadTile(tl.x,tl.y);
+			// }
+
+		}
+	}
 };
 
 function render(){	//the drawing part of the program
 
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
-			var tl = (tileArray[i][j]);		//grabes a tile
-			ctx.fillStyle=tl.color;			//gets its color
+			var tl = (tileArray[i][j]);						//grabes a tile
+			ctx.fillStyle=tl.color;							//gets its color
 			ctx.fillRect((i*delta),(j*delta),delta,delta);	//draws that tile
+			if(tl.selected){								//if selected, highlight the tile
+				ctx.strokeStyle = "#FFFFFF";
+      			ctx.lineWidth = 4;
+				ctx.strokeRect((i*delta)-2,(j*delta)+2,delta,delta);
+			}
 		}
 	}
 };
@@ -28,16 +46,30 @@ function checkKeys(){	//finds keys.  Will be implemented
 	
 };
 
+function Pop(){
+	this.size = 100;
+}
+
 function Tile(x, y,color){		//a tile.  pretty self explanatory.  X and Y are the positions
 	this.x = x;
 	this.y = y;
 	this.color = color;
+	this.pop = new Pop();
 
-	this.hover = false;		//will be used to make it clear what you are selecting.
+	this.selected = false;		//will be used to make it clear what you are selecting.
+};
+
+function Tile(x, y,color,size){		//a tile.  pretty self explanatory.  X and Y are the positions
+	this.x = x;
+	this.y = y;
+	this.color = color;
+	this.pop = new Pop(this.x, this.y, size);
+
+	this.selected = false;		//will be used to make it clear what you are selecting.
 };
 
 function WildernessTile(x,y){
-	Tile.call(this,x,y,"#FFFFFF");
+	Tile.call(this,x,y,"#00AA55");
 };
 
 function FarmTile(x,y){
@@ -61,11 +93,28 @@ function onCanvasClicked(xPos,yPos){
 	yPos /= delta;
 	xPos =  Math.floor(xPos);
 	yPos =  Math.floor(yPos);
-	tileArray[xPos][yPos].color = "#FF0000";
-
-	//ctx.fillStyle="#FF0000"
-	//ctx.fillRect((xPos*delta),(yPos*delta),delta,delta);
-
+	clickedTile = tileArray[xPos][yPos]
+	if(selectedTile == null){
+		selectedTile = clickedTile;
+		clickedTile.selected = true;
+		document.getElementById("dropDownMenu").style.display = "inline";
+		document.getElementById("dropDownMenu1").style.display = "inline";
+		document.getElementById("dropDownMenu2").style.display = "inline";
+		document.getElementById("dropDownMenu3").style.display = "inline";
+	}
+	else if (selectedTile == clickedTile){
+		clickedTile.selected = false;
+		selectedTile = null;
+		document.getElementById("dropDownMenu").style.display = "none";
+		document.getElementById("dropDownMenu1").style.display = "none";
+		document.getElementById("dropDownMenu2").style.display = "none";
+		document.getElementById("dropDownMenu3").style.display = "none";
+	}
+	else{
+		selectedTile.selected = false;
+		selectedTile = clickedTile;
+		clickedTile.selected = true;
+	}
 }
 
 var c=document.getElementById("canvas");		//gets the canvas
@@ -89,7 +138,7 @@ for (i = 0; i < x; i++){						//loads and fills the tile array.
 	var ar = [];
 	for (j = 0; j<y; j++){
 		if((i*j) > 16 && (i*j) < 196){
-			var t = new MineTile(i,j);
+			var t = new WildernessTile(i,j);
 		}
 		else{
 			var t = new FarmTile(i,j);

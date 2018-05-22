@@ -3,6 +3,25 @@ body{
   text-align:center;
   align-items:center;
 }
+br{
+	margin: 100px;
+}
+.gameHeader{
+	font-size: 36px;
+}
+.gameSubtext{
+	font-size: 24px;
+}
+.infoDiv{
+	border-radius: 25px;
+	left: 50%;
+    border: 8px solid #009955;
+    width: 1000px;
+  	margin: 30px 0px 0px -500px;
+    position: absolute;
+    align-self: center;
+    min-height: 20px;
+}
 .dropContent{
 	display: none;
 }
