@@ -12,16 +12,10 @@ function run(){		//called over and over to make the program run
 };
 
 function tick(){	//the thinking part of the program
-	checkKeys();
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
 			tileArray[i][j].pop.size *= 1.005;
 			var tl = (tileArray[i][j]);		//grabes a tile
-			var popSize = tl.pop.size;
-			// if(popSize >= 1000){
-			// 	tileArray[i][j] = new RoadTile(tl.x,tl.y);
-			// }
-
 		}
 	}
 };
@@ -31,7 +25,7 @@ function render(){	//the drawing part of the program
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
 			var tl = (tileArray[i][j]);						//grabes a tile
-			ctx.fillStyle=tl.color;							//gets its color
+			ctx.fillStyle = tl.clr;							//gets its color
 			ctx.fillRect((i*delta),(j*delta),delta,delta);	//draws that tile
 			if(tl.selected){								//if selected, highlight the tile
 				ctx.strokeStyle = "#FFFFFF";
@@ -42,50 +36,30 @@ function render(){	//the drawing part of the program
 	}
 };
 
-function checkKeys(){	//finds keys.  Will be implemented
-	
-};
-
 function Pop(){
 	this.size = 100;
 }
 
-function Tile(x, y,color){		//a tile.  pretty self explanatory.  X and Y are the positions
-	this.x = x;
-	this.y = y;
-	this.color = color;
+function componentToHex(c) {				//Convers a decimal to a hex.  Credit to Tim Down on Stack overflow
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+}
+
+function Tile(_x, _y, _wetness, _vegetation){		//a tile.  pretty self explanatory.  X and Y are the positions
+	this.x = _x;
+	this.y = _y;
+	this.wetness = _wetness;
+	this.vegetation = _vegetation;
+
+	var r = 255 - (0.5 * (_wetness + _vegetation));
+	var g = _vegetation;
+	var b = (0.5 * _wetness);
+	var rgb = ("#" + componentToHex(r) + componentToHex(g) + componentToHex(b));
+
+	this.clr = rgb;
 	this.pop = new Pop();
 
 	this.selected = false;		//will be used to make it clear what you are selecting.
-};
-
-function Tile(x, y,color,size){		//a tile.  pretty self explanatory.  X and Y are the positions
-	this.x = x;
-	this.y = y;
-	this.color = color;
-	this.pop = new Pop(this.x, this.y, size);
-
-	this.selected = false;		//will be used to make it clear what you are selecting.
-};
-
-function WildernessTile(x,y){
-	Tile.call(this,x,y,"#00AA55");
-};
-
-function FarmTile(x,y){
-	Tile.call(this,x,y,"#00DD44");
-};
-
-function MineTile(x,y){
-	Tile.call(this,x,y,"#EEDD00");
-};
-
-function RoadTile(x,y){
-	Tile.call(this,x,y,"#554433");
-};
-
-function WallTile(x,y){
-	Tile.call(this,x,y,"#999999");
 };
 
 function onCanvasClicked(xPos,yPos){
@@ -147,11 +121,11 @@ function toggelBoink(){
 	document.getElementById("dropDownMenuBoink").style.display = "inline";
 }
 
-var c=document.getElementById("canvas");		//gets the canvas
+var c = document.getElementById("canvas");		//gets the canvas
 var cLeft = c.offsetLeft;
 var cTop = c.offsetTop;
 
-var ctx=c.getContext("2d");						//gets context?
+var ctx = c.getContext("2d");						//gets context?
 var delta = (c.width/x);						//how big a tile is
 
 c.addEventListener('click', function(event){
@@ -167,12 +141,7 @@ var tileArray = [];								//all the tiles
 for (i = 0; i < x; i++){						//loads and fills the tile array.
 	var ar = [];
 	for (j = 0; j<y; j++){
-		if((i*j) > 16 && (i*j) < 196){
-			var t = new WildernessTile(i,j);
-		}
-		else{
-			var t = new FarmTile(i,j);
-		}
+		var t = new Tile(i,j, (25*i), (25*j));
 		ar[j] = t;
 	}
 	tileArray[i] = ar;
