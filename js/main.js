@@ -7,7 +7,7 @@ var j;
 var selectedTile;		//selected variable
 
 var looper;						//the interval
-var tick_speed = 100000;		//speed of looper
+var tick_speed = 100;		//speed of looper
 
 function run(){		//called over and over to make the program run
 	tick();
@@ -199,6 +199,6 @@ for (i = 0; i < x; i++){						//loads and fills the tile array.
 
 document.getElementById("speedSlider").value = (1001-tick_speed);
 
-run();
+render();
 
 looper = setInterval(function(){ run(); }, tick_speed);			//loops the program.
