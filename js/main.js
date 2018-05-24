@@ -45,18 +45,21 @@ function componentToHex(c) {				//Convers a decimal to a hex.  Credit to Tim Dow
     return hex.length == 1 ? "0" + hex : hex;
 }
 
+function updateRGB(_wetness, _vegetation){
+	var r = 255 - ((_wetness + _vegetation)/2);
+	var g = 125 + (_vegetation/2);
+	var b = (_wetness/2);
+	var rgb = ("#" + componentToHex(r) + componentToHex(g) + componentToHex(b));
+	return rgb;
+}
+
 function Tile(_x, _y, _wetness, _vegetation){		//a tile.  pretty self explanatory.  X and Y are the positions
 	this.x = _x;
 	this.y = _y;
 	this.wetness = _wetness;
 	this.vegetation = _vegetation;
 
-	var r = 255 - (0.5 * (_wetness + _vegetation));
-	var g = _vegetation;
-	var b = (0.5 * _wetness);
-	var rgb = ("#" + componentToHex(r) + componentToHex(g) + componentToHex(b));
-
-	this.clr = rgb;
+	this.clr = updateRGB(this.wetness, this.vegetation);
 	this.pop = new Pop();
 
 	this.selected = false;		//will be used to make it clear what you are selecting.
@@ -111,7 +114,7 @@ function toggelBuy(){
 	document.getElementById("dropDownMenuBoink").style.display = "none";
 }
 
-function toggelBoink(){	
+function toggelBoink(){
 	if(document.getElementById("dropDownMenuBoink").style.display == "inline"){
 		document.getElementById("dropDownMenuBoink").style.display = "none"
 		return;
@@ -141,7 +144,7 @@ var tileArray = [];								//all the tiles
 for (i = 0; i < x; i++){						//loads and fills the tile array.
 	var ar = [];
 	for (j = 0; j<y; j++){
-		var t = new Tile(i,j, (25*i), (25*j));
+		var t = new Tile(i,j, (16*i), (16*j));
 		ar[j] = t;
 	}
 	tileArray[i] = ar;
