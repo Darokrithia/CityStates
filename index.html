@@ -9,7 +9,9 @@
     	</p>
       <p class = "gameSubtext">
       	Click to select a tile
-      </p>
+    	</p>
+			<p>Game Speed</p>
+			<input type="range" id = "speedSlider" min="1" max="1000" step="1" onchange="updateTickSpeed()" oninput = "updateTickSpeed()">
     	<div id = "gameDiv">
    			<canvas id = "canvas" width = "600" height = "600">
    			</canvas>

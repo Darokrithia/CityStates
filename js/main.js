@@ -6,7 +6,8 @@ var j;
 
 var selectedTile;		//selected variable
 
-var tick_num = 0;		//a way to kep track of ticks
+var looper;						//the interval
+var tick_speed = 100000;		//speed of looper
 
 function run(){		//called over and over to make the program run
 	tick();
@@ -14,7 +15,6 @@ function run(){		//called over and over to make the program run
 };
 
 function tick(){	//the thinking part of the program
-	tick_num += 1;
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
 			var tl = (tileArray[i][j]);		//grabes a tile
@@ -39,10 +39,7 @@ function tick(){	//the thinking part of the program
 			tl.vegetation -= (5*Math.floor((tl.pop.size/100)));
 		}
 	}
-	if(tick_num >= 200){
-		updateTileHeader();
-		tick_num = 0;
-	}
+	updateTileHeader();
 };
 
 function render(){	//the drawing part of the program
@@ -55,7 +52,7 @@ function render(){	//the drawing part of the program
 			ctx.fillRect((i*delta),(j*delta),delta,delta);	//draws that tile
 			if(tl.selected){								//if selected, highlight the tile
 				ctx.strokeStyle = "#FFFFFF";
-      			ctx.lineWidth = 4;
+  			ctx.lineWidth = 4;
 				ctx.strokeRect((i*delta)-2,(j*delta)+2,delta,delta);
 			}
 		}
@@ -125,7 +122,6 @@ function onCanvasClicked(xPos,yPos){
 		document.getElementById("dropDownMenuBuild").style.display = "none";
 		document.getElementById("dropDownMenuBuy").style.display = "none";
 		document.getElementById("dropDownMenuBoink").style.display = "none";
-		return;
 	}
 	else{																					// else switch the selection
 		selectedTile.selected = false;
@@ -135,6 +131,7 @@ function onCanvasClicked(xPos,yPos){
 		document.getElementById("dropDownMenuBuy").style.display = "none";
 		document.getElementById("dropDownMenuBoink").style.display = "none";
 	}
+	render();													//update page
 	updateTileHeader();
 }
 
@@ -168,6 +165,12 @@ function toggelBoink(){
 	document.getElementById("dropDownMenuBoink").style.display = "inline";
 }
 
+function updateTickSpeed(){																									//update speed
+	tick_speed = 1001 - document.getElementById("speedSlider").value;					//get new speed
+	clearInterval(looper);
+	looper = setInterval(function(){ run(); }, tick_speed);										//reset loop
+}
+
 var c = document.getElementById("canvas");		//gets the canvas
 var cLeft = c.offsetLeft;
 var cTop = c.offsetTop;
@@ -194,4 +197,8 @@ for (i = 0; i < x; i++){						//loads and fills the tile array.
 	tileArray[i] = ar;
 }
 
-setInterval(function(){ run(); }, 1);			//loops the program.
+document.getElementById("speedSlider").value = (1001-tick_speed);
+
+run();
+
+looper = setInterval(function(){ run(); }, tick_speed);			//loops the program.
