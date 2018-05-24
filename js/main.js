@@ -4,7 +4,9 @@ var y = 10;
 var i;		//index variables
 var j;
 
-var selectedTile;
+var selectedTile;		//selected variable
+
+var tick_num = 0;		//a way to kep track of ticks
 
 function run(){		//called over and over to make the program run
 	tick();
@@ -12,11 +14,34 @@ function run(){		//called over and over to make the program run
 };
 
 function tick(){	//the thinking part of the program
+	tick_num += 1;
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
-			tileArray[i][j].pop.size *= 1.005;
 			var tl = (tileArray[i][j]);		//grabes a tile
+			if (0 < tl.wetness && tl.wetness < 255){
+				tl.wetness += (10*(Math.floor(Math.random() * 2))-5); //Add plus or minus five wetness
+			}
+			else if (tl.wetness <= 0){
+				tl.wetness += 5;
+			}
+			else if (tl.wetness >= 255){
+				tl.wetness -= 5;
+			}
+			if(tl.vegetation < tl.wetness){
+				tl.vegetation += 5;
+			}
+			if(tl.pop.size < (tl.vegetation*5)){
+				tl.pop.size = Math.floor(1.5 * tl.pop.size);
+			}
+			else{
+				tl.pop.size = Math.floor(.1*tl.pop.size);
+			}
+			tl.vegetation -= (5*Math.floor((tl.pop.size/100)));
 		}
+	}
+	if(tick_num >= 200){
+		updateTileHeader();
+		tick_num = 0;
 	}
 };
 
@@ -74,6 +99,14 @@ function Tile(_x, _y, _wetness, _vegetation){		//a tile.  pretty self explanator
 	this.updateColor();
 };
 
+function updateTileHeader(){
+	if(selectedTile == null){
+		return;
+	}
+	var tileInfo = document.getElementById("tileInfo");					//get tile info
+	tileInfo.innerHTML = ("Wetness: " + selectedTile.wetness + "\nFertility: " + selectedTile.vegetation + "\nPopulation: " + selectedTile.pop.size);
+}
+
 function onCanvasClicked(xPos,yPos){
 	xPos /= delta;																	//find where clicked
 	yPos /= delta;
@@ -102,9 +135,7 @@ function onCanvasClicked(xPos,yPos){
 		document.getElementById("dropDownMenuBuy").style.display = "none";
 		document.getElementById("dropDownMenuBoink").style.display = "none";
 	}
-
-	var tileInfo = document.getElementById("tileInfo");					//get tile info
-	tileInfo.innerHTML = ("Wetness: " + selectedTile.wetness + "\nFertility: " + selectedTile.vegetation);
+	updateTileHeader();
 }
 
 function toggelBuild(){
