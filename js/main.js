@@ -59,16 +59,19 @@ function Tile(_x, _y, _wetness, _vegetation){		//a tile.  pretty self explanator
 	this.y = _y;
 	this.wetness = _wetness;
 	this.vegetation = _vegetation;
-
-	this.clr = updateRGB(this.wetness, this.vegetation);
 	this.pop = new Pop();
 
 	this.selected = false;		//will be used to make it clear what you are selecting.
 
 	this.updateColor = function(){
-		if(wetness)
+		if (this.wetness < 0) this.wetness = 0;
+		if (this.wetness > 255) this.wetness = 255;
+		if (this.vegetation < 0) this.vegetation = 0;
+		if (this.vegetation > 255) this.vegetation = 255;
 		this.clr = updateRGB(this.wetness, this.vegetation);
 	}
+
+	this.updateColor();
 };
 
 function onCanvasClicked(xPos,yPos){
