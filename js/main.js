@@ -25,6 +25,7 @@ function render(){	//the drawing part of the program
 	for (i = 0; i<x; i++){		//goes through all tiles
 		for (j = y-1; j>=0; j--){
 			var tl = (tileArray[i][j]);						//grabes a tile
+			tl.updateColor();										//updates color
 			ctx.fillStyle = tl.clr;							//gets its color
 			ctx.fillRect((i*delta),(j*delta),delta,delta);	//draws that tile
 			if(tl.selected){								//if selected, highlight the tile
@@ -46,9 +47,9 @@ function componentToHex(c) {				//Convers a decimal to a hex.  Credit to Tim Dow
 }
 
 function updateRGB(_wetness, _vegetation){
-	var r = 255 - ((_wetness + _vegetation)/2);
-	var g = 125 + (_vegetation/2);
-	var b = (_wetness/2);
+	var r = Math.floor(255 - ((_wetness + _vegetation)/2));
+	var g = Math.floor(125 + (_vegetation/2));
+	var b = Math.floor((_wetness/2));
 	var rgb = ("#" + componentToHex(r) + componentToHex(g) + componentToHex(b));
 	return rgb;
 }
@@ -63,28 +64,34 @@ function Tile(_x, _y, _wetness, _vegetation){		//a tile.  pretty self explanator
 	this.pop = new Pop();
 
 	this.selected = false;		//will be used to make it clear what you are selecting.
+
+	this.updateColor = function(){
+		if(wetness)
+		this.clr = updateRGB(this.wetness, this.vegetation);
+	}
 };
 
 function onCanvasClicked(xPos,yPos){
-	xPos /= delta;
+	xPos /= delta;																	//find where clicked
 	yPos /= delta;
 	xPos =  Math.floor(xPos);
 	yPos =  Math.floor(yPos);
-	clickedTile = tileArray[xPos][yPos]
-	if(selectedTile == null){
+	clickedTile = tileArray[xPos][yPos]							// get that tile
+	if(selectedTile == null){												//if no slection, select a tile and reveal drop down
 		selectedTile = clickedTile;
 		clickedTile.selected = true;
 		document.getElementById("dropDownMenu").style.display = "inline";
 	}
-	else if (selectedTile == clickedTile){
+	else if (selectedTile == clickedTile){					//if already slected, remove selction and hide drop down
 		clickedTile.selected = false;
 		selectedTile = null;
 		document.getElementById("dropDownMenu").style.display = "none";
 		document.getElementById("dropDownMenuBuild").style.display = "none";
 		document.getElementById("dropDownMenuBuy").style.display = "none";
 		document.getElementById("dropDownMenuBoink").style.display = "none";
+		return;
 	}
-	else{
+	else{																					// else switch the selection
 		selectedTile.selected = false;
 		selectedTile = clickedTile;
 		clickedTile.selected = true;
@@ -92,6 +99,9 @@ function onCanvasClicked(xPos,yPos){
 		document.getElementById("dropDownMenuBuy").style.display = "none";
 		document.getElementById("dropDownMenuBoink").style.display = "none";
 	}
+
+	var tileInfo = document.getElementById("tileInfo");					//get tile info
+	tileInfo.innerHTML = ("Wetness: " + selectedTile.wetness + "\nFertility: " + selectedTile.vegetation);
 }
 
 function toggelBuild(){
@@ -144,7 +154,7 @@ var tileArray = [];								//all the tiles
 for (i = 0; i < x; i++){						//loads and fills the tile array.
 	var ar = [];
 	for (j = 0; j<y; j++){
-		var t = new Tile(i,j, (16*i), (16*j));
+		var t = new Tile(i,j, (25*i), (25*j));
 		ar[j] = t;
 	}
 	tileArray[i] = ar;
