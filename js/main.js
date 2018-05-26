@@ -7,7 +7,7 @@ var j;
 var selectedTile;		//selected variable
 
 var looper;						//the interval
-var tick_speed = 100;		//speed of looper
+var tick_speed = 500;		//speed of looper
 
 function run(){		//called over and over to make the program run
 	tick();
@@ -30,11 +30,27 @@ function tick(){	//the thinking part of the program
 			if(tl.vegetation < tl.wetness){
 				tl.vegetation += 5;
 			}
-			if(tl.pop.size < (tl.vegetation*5)){
+			if(tl.pop.size < (tl.vegetation*20)){
 				tl.pop.size = Math.floor(1.5 * tl.pop.size*tl.pop.percentFed);
+				if(tl.pop.size < (tl.vegetation*20)){
+					var pof = (((tl.vegetation*20)-tl.pop.size)/(tl.pop.size));
+					var new_full = tl.pop.percentHungry*pof;
+					tl.pop.percentFed += new_full;
+					tl.pop.percentHungry -= new_full;
+					var new_hungry = tl.pop.percentStarving*pof;
+					tl.pop.percentHungry += new_hungry;
+					tl.pop.percentStarving -= new_hungry;
+				}
 			}
 			else{
-				tl.pop.size = Math.floor(.1*tl.pop.size);
+				var pf = ((tl.pop.size - (tl.vegetation*20))/(tl.pop.size));
+				var new_hungry = tl.pop.percentFed*pf;
+				tl.pop.percentFed -= new_hungry;
+				tl.pop.percentHungry += new_hungry;
+				var new_starved = tl.pop.percentHungry*pf;
+				tl.pop.percentHungry -= new_starved;
+				tl.pop.percentStarving += new_starved;
+				tl.pop.size -=  Math.floor(tl.pop.size*tl.pop.percentStarving*pf);
 			}
 			tl.vegetation -= (5*Math.floor((tl.pop.size/100)));
 		}
