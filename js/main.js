@@ -31,7 +31,7 @@ function tick(){	//the thinking part of the program
 				tl.vegetation += 5;
 			}
 			if(tl.pop.size < (tl.vegetation*5)){
-				tl.pop.size = Math.floor(1.5 * tl.pop.size);
+				tl.pop.size = Math.floor(1.5 * tl.pop.size*tl.pop.percentFed);
 			}
 			else{
 				tl.pop.size = Math.floor(.1*tl.pop.size);
@@ -61,6 +61,9 @@ function render(){	//the drawing part of the program
 
 function Pop(){
 	this.size = 100;
+	this.percentFed = 1;
+	this.percentHungry = 0;
+	this.percentStarving = 0;
 }
 
 function componentToHex(c) {				//Convers a decimal to a hex.  Credit to Tim Down on Stack overflow
