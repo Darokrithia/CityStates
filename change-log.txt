@@ -1,0 +1,14 @@
+Version 0.000 [start - 07/16/18]
+____________________________________________________________
+*Started keeping track of version history
+*Added .gitignore file
+*State of game before version tracking began
+	-Made a canvas
+	-Populated canvas with tiles
+	-Made tiles display a color
+	-Added stats to tile that determined color
+	-Added menu
+	-Made menu expandible
+	-Added pop
+	-Made tick more interesting
+	-Probably more minor stuff I don't remember
